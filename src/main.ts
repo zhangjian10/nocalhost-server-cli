@@ -1,19 +1,29 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {NocalhostServe} from './nocalhost'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    // let url = core.getInput('url')
+    // let email = core.getInput('email')
+    // let password = core.getInput('password')
+    // const spaceId = core.getInput('spaceId')
+    let url = 'http://127.0.0.1/'
+    let email = 'admin@admin.com'
+    let password = '123456'
+    let spaceId = 10
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const serve = NocalhostServe.single({url, email, password})
+    if (spaceId) {
+      serve.DevSpace.deleteDevSpace(10)
+      return
+    }
 
-    core.setOutput('time', new Date().toTimeString())
+    await serve.DevSpace.create()
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
 
-run()
+;(async () => {
+  await run()
+})()
