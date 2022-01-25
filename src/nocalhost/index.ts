@@ -1,7 +1,7 @@
-import axios, {AxiosResponse} from 'axios'
-import {login} from './login'
-import * as devSpace from './devSpace'
-import {ServerInfo} from './type'
+import axios, { AxiosResponse } from 'axios'
+import user from './user'
+import { ServerInfo } from './type'
+import assert from 'assert'
 
 interface Response {
   code: number
@@ -11,17 +11,12 @@ interface Response {
 
 export class NocalhostServe {
   private token?: string
-  public DevSpace = devSpace
 
-  private constructor(info: ServerInfo) {
-    const api = axios.create({baseURL: info.url})
+  private constructor(private info: ServerInfo) {
+    const api = axios.create({ baseURL: info.url })
 
     api.interceptors.request.use(async config => {
       config.headers = config.headers ?? {}
-
-      if (!this.token && config.headers['anonymous'] !== true) {
-        this.token = await login(info)
-      }
 
       if (this.token) {
         config.headers['authorization'] = 'Bearer ' + this.token
@@ -42,7 +37,24 @@ export class NocalhostServe {
     global.api = api
   }
 
+  private async login() {
+    this.token = await user.login(this.info)
+    await user.getInfo()
+  }
+
   static single(info: ServerInfo) {
     return new NocalhostServe(info)
+  }
+
+  public async call(str: string) {
+    const [moduleName, action] = str.split('.')
+
+    const module = require(`./${moduleName}`)
+
+    assert(module && action in module, `'${str}' action not found`)
+
+    await this.login()
+
+    await module[action]()
   }
 }

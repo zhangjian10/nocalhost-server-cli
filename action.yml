@@ -1,19 +1,22 @@
-name: 'nocalhost vcluster'
+name: 'nocalhost server cli'
 description: 'Provide a description here'
 author: 'zj'
 inputs:
   url:
     required: true
-    description: 'input description here'
+    description: 'url'
   email:
     required: true
-    description: 'input description here'
+    description: 'email'
   password:
     required: true
-    description: 'input description here'
-  spaceId:
+    description: 'password'
+  action:
+    required: true
+    description: 'action'
+  parameters:
     required: false
-    description: 'input description here'
+    description: 'parameters'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'

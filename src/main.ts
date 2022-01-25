@@ -1,29 +1,32 @@
 import * as core from '@actions/core'
-import {NocalhostServe} from './nocalhost'
+
+import { NocalhostServe } from './nocalhost'
 
 async function run(): Promise<void> {
   try {
-    // let url = core.getInput('url')
-    // let email = core.getInput('email')
-    // let password = core.getInput('password')
-    // const spaceId = core.getInput('spaceId')
-    let url = 'http://127.0.0.1/'
-    let email = 'admin@admin.com'
-    let password = '123456'
-    let spaceId = 10
+    const url = core.getInput('url')
+    const email = core.getInput('email')
+    const password = core.getInput('password')
+    const action = core.getInput('action')
 
-    const serve = NocalhostServe.single({url, email, password})
-    if (spaceId) {
-      serve.DevSpace.deleteDevSpace(10)
-      return
-    }
+    const serve = NocalhostServe.single({ url, email, password })
 
-    await serve.DevSpace.create()
+    await serve.call(action)
+
+    process.exit(1)
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (process.env.CI) {
+      if (error instanceof Error) {
+        core.setFailed(error.message)
+      }
+    }
+    else {
+      console.error(error)
+      process.exit(-1)
+    }
   }
 }
 
-;(async () => {
+; (async () => {
   await run()
 })()
