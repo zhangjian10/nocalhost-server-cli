@@ -1,6 +1,9 @@
 name: 'nocalhost server cli'
-description: 'Provide a description here'
+description: 'nocalhost server cli'
 author: 'zj'
+branding:
+  icon: 'box'
+  color: 'gray-dark'
 inputs:
   url:
     required: true
