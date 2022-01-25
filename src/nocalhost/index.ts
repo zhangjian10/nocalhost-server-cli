@@ -1,6 +1,6 @@
-import axios, {AxiosResponse} from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import user from './user'
-import {ServerInfo} from './type'
+import { ServerInfo } from './type'
 import assert from 'assert'
 
 interface Response {
@@ -13,7 +13,7 @@ export class NocalhostServe {
   private token?: string
 
   private constructor(private info: ServerInfo) {
-    const api = axios.create({baseURL: info.url})
+    const api = axios.create({ baseURL: info.url })
 
     api.interceptors.request.use(async config => {
       config.headers = config.headers ?? {}
@@ -51,7 +51,7 @@ export class NocalhostServe {
 
     const module = require(`./${moduleName}`)
 
-    assert(module && action in module, `'${str}' not found`)
+    assert(module && action in module, `'${str}' action not found`)
 
     await this.login()
 

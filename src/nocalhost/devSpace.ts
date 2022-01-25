@@ -1,8 +1,11 @@
 import assert from 'assert'
 import crypto from 'crypto'
 import { setTimeout } from 'timers/promises'
-import { getParameters } from '../lib'
 
+import { isNumber } from 'lodash'
+import * as core from '@actions/core'
+
+import { getParameters } from '../lib'
 import cluster from './cluster'
 
 async function create() {
@@ -38,14 +41,17 @@ async function create() {
 
   await new Promise<void>(async (resolve, reject) => {
 
-    global.setTimeout(reject.bind(null, `Waiting for '${id}' completion timeout`), 1_0000)
+    global.setTimeout(reject.bind(null, `Waiting for '${id}' completion timeout`), 300_0000)
 
     await waitingForCompletion(id)
 
     resolve()
   })
 
-  return await get(id)
+  const { id: space_id, kubeconfig } = await get(id)
+
+  core.setOutput('space_id', space_id)
+  core.setOutput('kubeconfig', kubeconfig)
 }
 
 async function get(id: number) {
@@ -80,7 +86,11 @@ async function waitingForCompletion(id: number) {
 
 }
 
-async function deleteDevSpace(id: number) {
+async function deleteDevSpace() {
+  const id = getParameters<number>(true)
+
+  assert(id && isNumber(id), TypeError("'id' is not numeric type"))
+
   return api.delete(`/v1/dev_space/${id}`)
 }
 
