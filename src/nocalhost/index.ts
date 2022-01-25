@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 import user from './user'
 import { ServerInfo } from './type'
 import assert from 'assert'
+import * as devSpace from './devSpace'
 
 interface Response {
   code: number
@@ -49,7 +50,9 @@ export class NocalhostServe {
   public async call(str: string) {
     const [moduleName, action] = str.split('.')
 
-    const module = require(`./${moduleName}`)
+    const modules: any = { "devSpace": devSpace }
+
+    const module = modules[moduleName]
 
     assert(module && action in module, `'${str}' action not found`)
 
