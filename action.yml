@@ -1,4 +1,4 @@
-name: 'nocalhost vcluster'
+name: 'nocalhost server cli'
 description: 'Provide a description here'
 author: 'zj'
 inputs:
