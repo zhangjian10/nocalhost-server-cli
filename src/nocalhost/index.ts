@@ -1,8 +1,9 @@
-import axios, { AxiosResponse } from 'axios'
-import user from './user'
-import { ServerInfo } from './type'
+import axios, {AxiosResponse} from 'axios'
 import assert from 'assert'
-import * as devSpace from './devSpace'
+
+import devSpace from './dev-space'
+import {ServerInfo} from './type'
+import user from './user'
 
 interface Response {
   code: number
@@ -14,13 +15,13 @@ export class NocalhostServe {
   private token?: string
 
   private constructor(private info: ServerInfo) {
-    const api = axios.create({ baseURL: info.url })
+    const api = axios.create({baseURL: info.host})
 
     api.interceptors.request.use(async config => {
       config.headers = config.headers ?? {}
 
       if (this.token) {
-        config.headers['authorization'] = 'Bearer ' + this.token
+        config.headers['authorization'] = `Bearer ${this.token}`
       }
 
       return config
@@ -47,10 +48,11 @@ export class NocalhostServe {
     return new NocalhostServe(info)
   }
 
-  public async call(str: string) {
+  async call(str: string) {
     const [moduleName, action] = str.split('.')
 
-    const modules: any = { "devSpace": devSpace }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const modules: any = {devSpace}
 
     const module = modules[moduleName]
 
