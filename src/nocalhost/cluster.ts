@@ -1,5 +1,5 @@
 async function list() {
-  return await api.get<null, Array<{name: string; id: number}>>('/v1/cluster')
+  return await api.get<null, {name: string; id: number}[]>('/v1/cluster')
 }
 
 async function find(name: string) {

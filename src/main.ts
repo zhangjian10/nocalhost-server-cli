@@ -1,28 +1,27 @@
 import * as core from '@actions/core'
 
-import { NocalhostServe } from './nocalhost'
+import {NocalhostServe} from './nocalhost'
 
 async function run(): Promise<void> {
   try {
-    const url = core.getInput('url')
+    const host = core.getInput('host')
     const email = core.getInput('email')
     const password = core.getInput('password')
     const action = core.getInput('action')
 
-    const serve = NocalhostServe.single({ url, email, password })
+    const serve = NocalhostServe.single({host, email, password})
 
     await serve.call(action)
 
-    process.exit(1)
+    process.exit(0)
   } catch (error) {
     if (process.env.CI) {
       if (error instanceof Error) {
         core.setFailed(error.message)
       }
-    }
-    else {
+    } else {
       console.error(error)
-      process.exit(-1)
+      process.exit(1)
     }
   }
 }
