@@ -1,13 +1,13 @@
-import * as core from '@actions/core'
+import {getInput, setFailed} from '@actions/core'
 
 import {NocalhostServe} from './nocalhost'
 
 async function run(): Promise<void> {
   try {
-    const host = core.getInput('host')
-    const email = core.getInput('email')
-    const password = core.getInput('password')
-    const action = core.getInput('action')
+    const host = getInput('host')
+    const email = getInput('email')
+    const password = getInput('password')
+    const action = getInput('action')
 
     const serve = NocalhostServe.single({host, email, password})
 
@@ -17,11 +17,10 @@ async function run(): Promise<void> {
   } catch (error) {
     if (process.env.CI) {
       if (error instanceof Error) {
-        core.setFailed(error.message)
+        setFailed(error.message)
       }
     } else {
-      console.error(error)
-      process.exit(1)
+      throw error
     }
   }
 }
