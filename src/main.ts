@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 
-import { NocalhostServe } from './nocalhost'
+import {NocalhostServe} from './nocalhost'
 
 async function run(): Promise<void> {
   try {
@@ -9,7 +9,7 @@ async function run(): Promise<void> {
     const password = core.getInput('password')
     const action = core.getInput('action')
 
-    const serve = NocalhostServe.single({ host, email, password })
+    const serve = NocalhostServe.single({host, email, password})
 
     await serve.call(action)
 
@@ -19,8 +19,7 @@ async function run(): Promise<void> {
       if (error instanceof Error) {
         core.setFailed(error.message)
       }
-    }
-    else {
+    } else {
       console.error(error)
       process.exit(1)
     }

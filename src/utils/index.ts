@@ -1,17 +1,15 @@
-
 import assert from 'assert'
 
-import { getInput, debug } from '@actions/core'
+import core from '@actions/core'
 
-export function getParameters<T>(required: boolean = false): Partial<T> {
-    const parameters = getInput("parameters")
+export function getParameters<T>(required = false): Partial<T> {
+  const parameters = core.getInput('parameters')
 
-    if (required) {
-        assert(parameters, TypeError("input 'parameters' not found"))
-    }
+  if (required) {
+    assert(parameters, TypeError("input 'parameters' not found"))
+  }
 
-    debug(`parameters:${parameters}`)
+  core.debug(`parameters:${parameters}`)
 
-    return JSON.parse(parameters || '{}')
-
+  return JSON.parse(parameters || '{}')
 }
