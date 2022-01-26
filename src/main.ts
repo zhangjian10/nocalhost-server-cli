@@ -1,4 +1,4 @@
-import * as core from '@actions/core'
+import core from '@actions/core'
 
 import {NocalhostServe} from './nocalhost'
 
@@ -20,7 +20,9 @@ async function run(): Promise<void> {
         core.setFailed(error.message)
       }
     } else {
-      console.error(error)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      process.stderr.write(error as any)
+      process.stderr.end()
       process.exit(1)
     }
   }
