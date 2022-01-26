@@ -30,12 +30,12 @@ jobs:
           mkdir ~/.kube
           echo "${{ steps.create-cluster.outputs.kubeconfig }}" > ~/.kube/config
           cat ~/.kube/config
-      # - name: delete cluster
-      #   id:  create-cluster
-      #   uses: zhangjian10/nocalhost-server-cli@v0.0.3
-      #   with:
-      #     host: ${{ secrets.NOCALHOST_VCLUSTER_HOST_FOR_TEST }}
-      #     email: ${{ secrets.NOCALHOST_VCLUSTER_EMAIL_FOR_TEST }}
-      #     password: ${{ secrets.NOCALHOST_VCLUSTER_PASSWORD_FOR_TEST }}
-      #     action: devSpace.remove
-      #     parameters: 1
+      - name: delete cluster
+        id:  create-cluster
+        uses: zhangjian10/nocalhost-server-cli@v0.0.3
+        with:
+          host: ${{ secrets.NOCALHOST_VCLUSTER_HOST_FOR_TEST }}
+          email: ${{ secrets.NOCALHOST_VCLUSTER_EMAIL_FOR_TEST }}
+          password: ${{ secrets.NOCALHOST_VCLUSTER_PASSWORD_FOR_TEST }}
+          action: devSpace.remove
+          parameters: ${{ steps.create-cluster.outputs.space_id }}
