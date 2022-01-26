@@ -15,7 +15,7 @@ async function run(): Promise<void> {
 
     await serve.call(action)
 
-    process.exit(1)
+    process.exit(0)
   } catch (error) {
     if (process.env.CI) {
       if (error instanceof Error) {
@@ -24,7 +24,7 @@ async function run(): Promise<void> {
     }
     else {
       console.error(error)
-      process.exit(-1)
+      process.exit(1)
     }
   }
 }
