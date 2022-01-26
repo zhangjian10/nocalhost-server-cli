@@ -27,8 +27,9 @@ jobs:
           action: devSpace.create
       - name: Get outputs
         run: |
-           echo "space_id: ${{ steps.create-cluster.outputs.space_id }}"
-           echo "kubeconfig: ${{ steps.create-cluster.outputs.kubeconfig }}"
+          mkdir ~/.kube
+          echo "${{ steps.create-cluster.outputs.kubeconfig }}" > ~/.kube/config
+          cat ~/.kube/config
       # - name: delete cluster
       #   id:  create-cluster
       #   uses: zhangjian10/nocalhost-server-cli@v0.0.3
