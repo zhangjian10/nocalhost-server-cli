@@ -1,6 +1,9 @@
 import assert from 'assert'
 import crypto from 'crypto'
 import { setTimeout } from 'timers/promises'
+import fs from 'fs/promises'
+import path from 'path'
+import { homedir } from 'os'
 
 import { isNumber } from 'lodash'
 import * as core from '@actions/core'
@@ -11,10 +14,10 @@ import cluster from './cluster'
 async function create() {
   let cluster_id = 1
 
-  const condition = getParameters<{ clusterName: string }>()
+  const parameters = getParameters<{ clusterName: string, savePath: string }>()
 
-  if (condition.clusterName) {
-    const { clusterName } = condition
+  if (parameters.clusterName) {
+    const { clusterName } = parameters
     const info = await cluster.find(clusterName)
 
     assert(info, `cluster '${clusterName}' not found`)
@@ -51,9 +54,19 @@ async function create() {
   const { id: space_id, kubeconfig } = await get(id)
 
   core.setOutput('space_id', space_id)
-  core.setOutput('kubeconfig', kubeconfig)
-}
 
+  await saveKubeconfig(kubeconfig, parameters.savePath)
+}
+export async function saveKubeconfig(kubeconfig: string, savePath?: string) {
+  if (!savePath) {
+    const kubePath = path.join(homedir(), ".kube")
+    await fs.mkdir(kubePath, { recursive: true })
+
+    savePath = path.join(kubePath, "config")
+  }
+
+  await fs.writeFile(savePath, kubeconfig)
+}
 async function get(id: number) {
   return api.get<null, { kubeconfig: string; id: number }>(
     `/v1/dev_space/${id}/detail?user_id=${global.uid}`
