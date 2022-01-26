@@ -28,7 +28,7 @@ jobs:
       - name: Get outputs
         run: |
           mkdir ~/.kube
-          echo "${{ steps.create-cluster.outputs.kubeconfig }}" > ~/.kube/config
+          echo "::add-mask::${{ steps.create-cluster.outputs.kubeconfig }}" > ~/.kube/config
           cat ~/.kube/config
       - name: delete cluster
         uses: zhangjian10/nocalhost-server-cli@v0.0.3
