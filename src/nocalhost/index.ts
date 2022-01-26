@@ -54,7 +54,8 @@ export class NocalhostServe {
 
     const module = modules[moduleName]
 
-    assert(module && action in module, `'${str}' action not found`)
+    assert(module, `action cannot be empty`)
+    assert(action in module, `'${str}' action not found`)
 
     await this.login()
 
