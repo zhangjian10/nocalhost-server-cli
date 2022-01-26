@@ -14,7 +14,7 @@ export class NocalhostServe {
   private token?: string
 
   private constructor(private info: ServerInfo) {
-    const api = axios.create({ baseURL: info.url })
+    const api = axios.create({ baseURL: info.host })
 
     api.interceptors.request.use(async config => {
       config.headers = config.headers ?? {}

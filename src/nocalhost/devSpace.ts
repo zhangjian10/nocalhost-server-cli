@@ -5,7 +5,7 @@ import { setTimeout } from 'timers/promises'
 import { isNumber } from 'lodash'
 import * as core from '@actions/core'
 
-import { getParameters } from '../lib'
+import { getParameters } from '../utils'
 import cluster from './cluster'
 
 async function create() {

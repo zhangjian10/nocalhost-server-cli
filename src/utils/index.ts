@@ -1,15 +1,17 @@
 
 import assert from 'assert'
 
-import { getInput } from '@actions/core'
+import { getInput, debug } from '@actions/core'
 
 export function getParameters<T>(required: boolean = false): Partial<T> {
-    const parameters = process.env.CI ? (getInput("parameters")) : process.env[`INPUT_PARAMETERS`]
+    const parameters = getInput("parameters")
 
     if (required) {
         assert(parameters, TypeError("input 'parameters' not found"))
     }
 
-    return JSON.parse(parameters ?? '{}')
+    debug(`parameters:${parameters}`)
+
+    return JSON.parse(parameters || '{}')
 
 }

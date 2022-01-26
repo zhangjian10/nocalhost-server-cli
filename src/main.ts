@@ -4,12 +4,12 @@ import { NocalhostServe } from './nocalhost'
 
 async function run(): Promise<void> {
   try {
-    const url = core.getInput('url')
+    const host = core.getInput('host')
     const email = core.getInput('email')
     const password = core.getInput('password')
     const action = core.getInput('action')
 
-    const serve = NocalhostServe.single({ url, email, password })
+    const serve = NocalhostServe.single({ host, email, password })
 
     await serve.call(action)
 

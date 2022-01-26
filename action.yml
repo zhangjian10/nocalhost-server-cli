@@ -5,9 +5,9 @@ branding:
   icon: 'box'
   color: 'gray-dark'
 inputs:
-  url:
+  host:
     required: true
-    description: 'url'
+    description: 'host'
   email:
     required: true
     description: 'email'

@@ -1,5 +1,5 @@
 export interface ServerInfo {
-  url: string
+  host: string
   email: string
   password: string
 }
