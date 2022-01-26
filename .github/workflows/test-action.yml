@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Create cluster
         id:  create-cluster
-        uses: zhangjian10/nocalhost-server-cli@v0.0.4
+        uses: zhangjian10/nocalhost-server-cli@v0.0.6
         with:
           host: ${{ secrets.NOCALHOST_VCLUSTER_HOST_FOR_TEST }}
           email: ${{ secrets.NOCALHOST_VCLUSTER_EMAIL_FOR_TEST }}
@@ -29,7 +29,7 @@ jobs:
         run: |
           cat ~/.kube/config
       - name: delete cluster
-        uses: zhangjian10/nocalhost-server-cli@v0.0.4
+        uses: zhangjian10/nocalhost-server-cli@v0.0.6
         with:
           host: ${{ secrets.NOCALHOST_VCLUSTER_HOST_FOR_TEST }}
           email: ${{ secrets.NOCALHOST_VCLUSTER_EMAIL_FOR_TEST }}
