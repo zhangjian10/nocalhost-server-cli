@@ -9,6 +9,8 @@ async function run(): Promise<void> {
     const password = core.getInput('password')
     const action = core.getInput('action')
 
+    core.debug(`host:${host},email:${email},password:${password},action:${action}`)
+
     const serve = NocalhostServe.single({ host, email, password })
 
     await serve.call(action)
