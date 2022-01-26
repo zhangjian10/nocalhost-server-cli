@@ -5,7 +5,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import {homedir} from 'os'
 import {isNumber} from 'lodash'
-import core from '@actions/core'
+import {setOutput} from '@actions/core'
 
 import {getParameters} from '../utils'
 import cluster from './cluster'
@@ -54,7 +54,7 @@ async function create() {
 
   const {id: space_id, kubeconfig} = await get(id)
 
-  core.setOutput('space_id', space_id)
+  setOutput('space_id', space_id)
 
   await saveKubeconfig(kubeconfig, parameters.savePath)
 }
