@@ -86,7 +86,7 @@ async function waitingForCompletion(id: number) {
 
 }
 
-async function deleteDevSpace() {
+async function remove() {
   const id = getParameters<number>(true)
 
   assert(id && isNumber(id), TypeError("'id' is not numeric type"))
@@ -94,4 +94,4 @@ async function deleteDevSpace() {
   return api.delete(`/v1/dev_space/${id}`)
 }
 
-export { deleteDevSpace, create, get }
+export { remove, create, get }
