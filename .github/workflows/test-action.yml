@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Create cluster
         id: create-cluster
-        uses: zhangjian10/nocalhost-server-cli
+        uses: zhangjian10/nocalhost-server-cli@latest
         with:
           host: ${{ secrets.NOCALHOST_VCLUSTER_HOST_FOR_TEST }}
           email: ${{ secrets.NOCALHOST_VCLUSTER_EMAIL_FOR_TEST }}
