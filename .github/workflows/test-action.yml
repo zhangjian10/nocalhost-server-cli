@@ -18,8 +18,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Create cluster
-        id:  create-cluster
-        uses: zhangjian10/nocalhost-server-cli@v0.0.8
+        id: create-cluster
+        uses: zhangjian10/nocalhost-server-cli
         with:
           host: ${{ secrets.NOCALHOST_VCLUSTER_HOST_FOR_TEST }}
           email: ${{ secrets.NOCALHOST_VCLUSTER_EMAIL_FOR_TEST }}
@@ -28,11 +28,3 @@ jobs:
       - name: Get outputs
         run: |
           cat ~/.kube/config
-      - name: delete cluster
-        uses: zhangjian10/nocalhost-server-cli@v0.0.8
-        with:
-          host: ${{ secrets.NOCALHOST_VCLUSTER_HOST_FOR_TEST }}
-          email: ${{ secrets.NOCALHOST_VCLUSTER_EMAIL_FOR_TEST }}
-          password: ${{ secrets.NOCALHOST_VCLUSTER_PASSWORD_FOR_TEST }}
-          action: devSpace.remove
-          parameters: ${{ steps.create-cluster.outputs.space_id }}
