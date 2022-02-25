@@ -22,4 +22,5 @@ inputs:
     description: 'parameters'
 runs:
   using: 'node16'
-  main: 'dist/index.js'
+  main: 'dist/main.js'
+  post: 'dist/post.js'

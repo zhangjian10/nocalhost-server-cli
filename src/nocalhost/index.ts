@@ -1,8 +1,9 @@
 import axios, {AxiosResponse} from 'axios'
 import assert from 'assert'
+import {saveState} from '@actions/core'
 
 import devSpace from './dev-space'
-import {ServerInfo} from './type'
+import {ActionResult, ServerInfo} from './type'
 import user from './user'
 
 interface Response {
@@ -40,15 +41,25 @@ export class NocalhostServe {
   }
 
   private async login() {
-    this.token = await user.login(this.info)
-    await user.getInfo()
+    if (this.info.token && this.info.uid) {
+      this.token = this.info.token
+      global.uid = this.info.uid
+    } else {
+      this.token = await user.login(this.info)
+      this.info.token = this.token
+
+      await user.getInfo()
+      this.info.uid = global.uid
+    }
+
+    saveState('serverInfo', this.info)
   }
 
   static single(info: ServerInfo) {
     return new NocalhostServe(info)
   }
 
-  async call(str: string) {
+  async call(str: string): Promise<ActionResult> {
     const [moduleName, action] = str.split('.')
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,6 +72,6 @@ export class NocalhostServe {
 
     await this.login()
 
-    await module[action]()
+    return module[action]()
   }
 }

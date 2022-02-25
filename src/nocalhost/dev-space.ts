@@ -9,19 +9,20 @@ import {setOutput} from '@actions/core'
 
 import {getParameters} from '../utils'
 import cluster from './cluster'
+import {Action} from './type'
 
-async function create() {
+const create: Action = async () => {
   let cluster_id = 1
 
   const parameters = getParameters<{clusterName: string; savePath: string}>()
 
   if (parameters.clusterName) {
     const {clusterName} = parameters
-    const info = await cluster.find(clusterName)
+    const item = await cluster.find(clusterName)
 
-    assert(info, `cluster '${clusterName}' not found`)
+    assert(item, `cluster '${clusterName}' not found`)
 
-    cluster_id = info.id
+    cluster_id = item.id
   }
 
   const space_name = `test-${crypto
@@ -57,7 +58,10 @@ async function create() {
   setOutput('space_id', space_id)
 
   await saveKubeconfig(kubeconfig, parameters.savePath)
+
+  return Promise.resolve({action: 'devSpace.remove', parameters: space_id})
 }
+
 export async function saveKubeconfig(kubeconfig: string, savePath?: string) {
   if (!savePath) {
     const kubePath = path.join(homedir(), '.kube')
@@ -68,6 +72,7 @@ export async function saveKubeconfig(kubeconfig: string, savePath?: string) {
 
   await fs.writeFile(savePath, kubeconfig)
 }
+
 async function get(id: number) {
   return api.get<null, {kubeconfig: string; id: number}>(
     `/v1/dev_space/${id}/detail?user_id=${global.uid}`
@@ -99,12 +104,12 @@ async function waitingForCompletion(id: number) {
   }
 }
 
-async function remove() {
+const remove: Action = async () => {
   const id = getParameters<number>(true)
 
   assert(id && isNumber(id), TypeError("'id' is not numeric type"))
 
-  return api.delete(`/v1/dev_space/${id}`)
+  await api.delete(`/v1/dev_space/${id}`)
 }
 
 export default {remove, create, get}
