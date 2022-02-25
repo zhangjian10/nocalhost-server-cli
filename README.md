@@ -34,5 +34,5 @@ vcluster delete
     password: ${{ secrets.NOCALHOST_VCLUSTER_PASSWORD_FOR_TEST }}
     action: devSpace.remove
     # The deleted cluster id can be used with the cluster id created above
-    parameters: ${{ steps.create-cluster.outputs.space_id }}
+    parameters: 1
 ```
